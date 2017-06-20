@@ -5,13 +5,9 @@ class Leftside extends Component {
     render() {
         return (
            <nav>
-            <div class="nav-wrapper">
+            <div className="nav-wrapper">
               
-                <ul class="right center">
-                    <li><a href="sass.html">App</a></li>
-                    <li><a href="badges.html">Detail</a></li>
-                 
-                </ul>
+            <div> <i className="material-icons" >dashboard</i><span> Bloggers</span> </div>
             </div>
         </nav>
         );

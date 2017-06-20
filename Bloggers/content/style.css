@@ -16,15 +16,39 @@ body {
     margin: 0;
     font-size: 13px;
     line-height: 1.231;
-    overflow:hidden;
+    overflow:auto;
     background-image: url('Images/bgg.png');
     background-repeat: repeat;
 }
-.card-panel{
+.card{
  background: rgb(49, 100, 136);
     color: white;
 }
-   
+.title{
+    background: rgba(0,0,0,0.25);
+    padding: 1em;
+    text-align: center;
+    margin-bottom: 1em;
+}
+.desc{
+    font-weight: bold;
+  
+
+}
+.comment-block{
+    margin-top: 2em;
+    padding: 2em;
+}
+.nav-wrapper div{
+    text-align: center;
+    margin: 0;
+}
+.nav-wrapper div span{
+  font-size: 3em;
+}
+.material-icons{
+    display: inline !important;
+}
 #map{
     height: 767px;
     position: relative;
@@ -291,6 +315,7 @@ header {
     padding: 15px;
     border-radius: 10px;
     float: left;
+    width: 100%;
     transition: all 0.3s ease-in;
 }
 
