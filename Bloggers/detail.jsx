@@ -6,13 +6,9 @@ class Detail extends React.Component {
 
     super(props)
     this.state = { data: [] }
-    this.signOrder = this.signOrder.bind(this);
+    this.increaseLike = this.increaseLike.bind(this);
   }
-  signOrder(id) {
-    debugger;
-    console.log(id);
-
-  }
+ 
   loadData() {
 
     fetch('blogdata.json')
@@ -27,48 +23,59 @@ class Detail extends React.Component {
     this.loadData()
   }
   increaseLike(count) {
-    console.log(this.count++);
-  };
+    console.log(this.count++)
+  }
   render() {
     const projectName = this.props.match.params.name;
-
-    return (<div>
-      {this.state.data.map((item, i) => {
+   
+    const block=this.state.data.map((item, i) => {
+     
+   
         if (item.Name == projectName) {
+           var comms = item.comments.map((cmm) => 
+           {
+                var replies = comms.replies.map((rep) => {
+          return <div>{rep}</div>
+          })
+          return <div>{cmm}</div>;
+          })
+           
+      
           return (<div className="row" key={i}>
-            <div className="col l1 m1">&nbsp;</div>
-            <div className="col s12 m10 l10"><div className="card" >
-              <div className="card-content">
-                <div className="title">
-                  <span>{item.Name}</span><br />
-                </div>
-                <span>{item.detail}</span><br />
+                      <div className="col l1 m1">&nbsp;</div>
+                      <div className="col s12 m10 l10"><div className="card" >
+                      <div className="card-content">
+                            <div className="title">
+                               <span>{item.Name}</span><br />
+                            </div>
+                               <span>{item.detail}</span><br />
 
-                <div className="comment-block">
-                  {item.comments.map(function (cmm, j) {
+                              <div className="comment-block">
 
-                    const temp = () => this.signOrder("test");
-                    return (<div className="row" key={j}>
-                      <div className="portfolio-item">
-                        <span className="desc">User:</span> <span>{cmm.user}<i className="material-icons" onClick={temp}>thumb_up</i></span><br />
-                        <span>{cmm.desc}</span>
-                        <span>{cmm.like}</span>
-                      </div>
-
-                    </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              }
-                       </div> </div>  </div>)
+                                    <div className="row">
+                                    <div className="portfolio-item">
+                                    <span className="desc">User:</span> <span>{comms.user}<i className="material-icons" >thumb_up</i></span><br />
+                                    <span>{comms.desc}</span>
+                                    <span>{comms.like}</span>
+                                  
+                                     </div>
+                                       </div>
+                                     
+                              </div>
+                             </div>
+                        
+                       </div> 
+                       </div>  
+                       </div>)
 
 
 
         }
 
       })
+    return (<div>
+      {
+        block
       }
 
     </div>)
