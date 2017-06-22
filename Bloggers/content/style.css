@@ -77,6 +77,9 @@ body {
     /*width: 208px;*/
     height:198px;
 }
+i .right{
+    float: right;
+}
 #map{
     height: 767px;
     position: relative;

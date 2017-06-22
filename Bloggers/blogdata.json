@@ -8,57 +8,53 @@
     {
         "user":"HP",
         "desc":"This is test",
-        "like":0,
-        "dislike":1,
+        "id":"10",
+       
         "replies":[
             {
-                "user":"test",
-                "des":"this is a test"
+                "user":"A",
+                "des":"this is a test from A"
             },
               {
-                "user":"test2",
-                "des":"this is a test"
+                "user":"B",
+                "des":"this is a test from B"
             },  {
-                "user":"test3",
-                "des":"this is a test"
+                "user":"C",
+                "des":"this is a test from C"
             },  {
-                "user":"test4",
-                "des":"this is a test"
+                "user":"D",
+                "des":"this is a test from D"
             }
         ]
     },
     {
-            "user":"HP",
-        "desc":"This is test",
-          "like":0,
-        "dislike":1
+         "user":"HP",
+         "desc":"This is test from HP",
+         "id":"11"
+       
     },
     {
-            "user":"HP",
-        "desc":"This is test", 
-         "like":0,
-        "dislike":1
+        "user":"ABC",
+        "desc":"This is test from ABC", 
+        "id":"12"
+      
     },
     {
-            "user":"HP",
-        "desc":"This is test",  "like":0,
-        "dislike":1
+            "user":"DEF",
+        "desc":"This is test from DEF",  
+     
+        "id":"13"
+     
     },
     {
-            "user":"HP",
-        "desc":"This is test",  "like":0,
-        "dislike":1
+        "user":"GHI",
+        "id":"14",
+        "desc":"This is test from GHI" 
+     
     }
    
-  ],
-  "replies":[
-      {
-
-      },
-      {
-
-      }
   ]
+
 }, {
   "image": "https://robohash.org/doloremquevoluptatemquos.jpg?size=50x50&set=set1",
   "Name": "Voyatouch",
