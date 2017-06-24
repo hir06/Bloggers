@@ -66,7 +66,7 @@ class Detail extends React.Component {
 {rep.des}
           </div>
          </div>)
-          : "No replies");
+          :<div className="row"> No replies</div>);
       const temp = () => this.increaseLike(cmm);
     
       const renderComments = comments =>
@@ -116,7 +116,7 @@ class Detail extends React.Component {
                 </div>
               </div>
             ))
-          : "No Comments");
+          : <div className="row"> No Comments</div>);
 
       return (
         <div className="row">

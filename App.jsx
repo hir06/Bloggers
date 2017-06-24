@@ -1,5 +1,5 @@
 import React from 'react';
-import SiteHeader from "./common/header";
+
 import Leftside from "./common/leftPanel";
 import { HashRouter, Switch, Route, match } from 'react-router-dom';
 
