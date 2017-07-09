@@ -4,15 +4,34 @@ import React from 'react';
 import { BrowserHistory } from 'react-router-dom';
 import { withRouter, Link } from "react-router-dom";
 import { LazyLoad } from 'react-lazy-load';
-import { InfiniteScroll } from 'react-infinite-scroll';
+// import { InfiniteScroll } from 'react-infinite-scroll-component';
 
 class Home extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { data: [] }
+    this.state =  {data: [], requestSent: false}
 
   }
 
+  componentDidMount() {
+    debugger;
+    
+    
+    const $scrollElement = $('.container')
+    $scrollElement.on('scroll', () => {
+        const scroll = $scrollElement.height() + $scrollElement.scrollTop() + this.props.scrollEndThreshold;
+        const progress = scroll / $scrollElement.find('.scroll-element').height() * 100 || 0;
+        if (progress >= 100) {
+            this.querySearchResult();
+        }
+    });
+
+    this.initFakeData();
+  
+  }
+    componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleOnScroll);
+  }
   loadData() {
     fetch('blogdata.json')
       .then(response => response.json())
@@ -21,13 +40,61 @@ class Home extends React.Component {
       })
       .catch(err => console.error(this.props.url, err.toString()))
   }
+  createFakeData(startKey, counter) {
+    var i = 0;
+    var data = [];
+    for (i = 0; i < counter; i++) {
+      var fakeData = (<div key={startKey+i} className="data-info">Fake Data {startKey+i}</div>);
+      data.push(fakeData);
+    }
 
-
-
-  componentDidMount() {
-    this.loadData()
+    return data;
   }
 
+
+    initFakeData() {
+    var data = this.createFakeData(this.state.data.length, 10);
+
+    this.setState({data: data});
+  }
+  querySearchResult() {
+    if (this.state.requestSent) {
+      return;
+    }
+
+    // enumerate a slow query
+    setTimeout(this.doQuery, 2000);
+
+    this.setState({requestSent: true});
+  }
+doQuery() {
+   debugger;
+    $.ajax({
+      url: "blogdata.json",
+      data: null,
+      method: "GET",
+      success: function(data, textStatus, jqXHR) {
+        var fakeData = data.slice(0,5);// this.createFakeData(this.state.data.length, 10);
+        var newData = this.state.data.concat(fakeData);
+        this.setState({data: newData, requestSent: false});
+      }.bind(this),
+      error: function(jqXHR, textStatus, errorThrown) {
+        this.setState({requestSent: false});
+      }.bind(this)
+    });
+  }
+  
+  handleOnScroll() {
+     debugger;
+    var scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+    var scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight;
+    var clientHeight = document.documentElement.clientHeight || window.innerHeight;
+    var scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
+
+    if (scrolledToBottom) {
+      this.querySearchResult();
+    }
+  }
   render() {
 
     const blocks = this.state.data.map((item, i) => {
@@ -56,8 +123,9 @@ class Home extends React.Component {
     return <div>
 
       <div className="row container">
-
-        {blocks}
+        <div className="scroll-element">
+          {blocks}
+        </div>
       </div>
 
     </div>
