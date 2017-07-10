@@ -80,7 +80,7 @@ class Home extends React.Component {
     });
 
     return <div>
-      {this.bigData && <h5>Loaded {this.state.loadedData.length} of {this.bigData.length}</h5>}
+      {this.bigData && <h5 className="white-text">Loaded {this.state.loadedData.length} of {this.bigData.length}</h5>}
       <div className="row scroll-container">
         <div className="scroll-element">
           {blocks}
