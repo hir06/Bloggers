@@ -4,100 +4,59 @@ import React from 'react';
 import { BrowserHistory } from 'react-router-dom';
 import { withRouter, Link } from "react-router-dom";
 import { LazyLoad } from 'react-lazy-load';
-// import { InfiniteScroll } from 'react-infinite-scroll-component';
+import { InfiniteScroll } from 'react-infinite-scroll';
+import Loader from 'react-loader';
 
 class Home extends React.Component {
   constructor(props) {
     super(props)
-    this.state =  {data: [], requestSent: false}
-
+    this.state = {
+      loadedData:[],
+      loading: false
+    }
   }
 
-  componentDidMount() {
-    debugger;
-    
-    
-    const $scrollElement = $('.container')
-    $scrollElement.on('scroll', () => {
-        const scroll = $scrollElement.height() + $scrollElement.scrollTop() + this.props.scrollEndThreshold;
-        const progress = scroll / $scrollElement.find('.scroll-element').height() * 100 || 0;
-        if (progress >= 100) {
-            this.querySearchResult();
-        }
-    });
-
-    this.initFakeData();
-  
-  }
-    componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleOnScroll);
-  }
   loadData() {
     fetch('blogdata.json')
       .then(response => response.json())
       .then(data => {
-        this.setState({ data: data })
+        this.setState({loading: true });
+        this.bigData = data;
+        setTimeout(() => {
+          this.setState({ loadedData: this.bigData.slice(0,15), loading: false })
+        },100)
       })
       .catch(err => console.error(this.props.url, err.toString()))
+
+      const $scrollElement = $('.scroll-container');
+      $scrollElement.on('scroll', () => {
+          const scroll = $scrollElement.height() + $scrollElement.scrollTop();
+          const progress = (scroll / ($scrollElement.find('.scroll-element').height())) * 100;
+          if (progress >= 100) {
+              this.onScrollEnd();
+          }
+      });
   }
-  createFakeData(startKey, counter) {
-    var i = 0;
-    var data = [];
-    for (i = 0; i < counter; i++) {
-      var fakeData = (<div key={startKey+i} className="data-info">Fake Data {startKey+i}</div>);
-      data.push(fakeData);
-    }
 
-    return data;
+
+  componentDidMount() {
+    this.loadData()
   }
 
-
-    initFakeData() {
-    var data = this.createFakeData(this.state.data.length, 10);
-
-    this.setState({data: data});
+  onScrollEnd(){
+    this.setState({loading: true});
+    
+    setTimeout(()=>{
+      const lastIndexOfLoadedItem = this.bigData.indexOf(this.state.loadedData[this.state.loadedData.length-1]);
+      const nextSetOfData= this.bigData.slice(0, lastIndexOfLoadedItem + 15);
+      this.setState({loadedData: nextSetOfData})
+      this.setState({loading: false})
+    }, 500)
   }
-  querySearchResult() {
-    if (this.state.requestSent) {
-      return;
-    }
 
-    // enumerate a slow query
-    setTimeout(this.doQuery, 2000);
-
-    this.setState({requestSent: true});
-  }
-doQuery() {
-   debugger;
-    $.ajax({
-      url: "blogdata.json",
-      data: null,
-      method: "GET",
-      success: function(data, textStatus, jqXHR) {
-        var fakeData = data.slice(0,5);// this.createFakeData(this.state.data.length, 10);
-        var newData = this.state.data.concat(fakeData);
-        this.setState({data: newData, requestSent: false});
-      }.bind(this),
-      error: function(jqXHR, textStatus, errorThrown) {
-        this.setState({requestSent: false});
-      }.bind(this)
-    });
-  }
-  
-  handleOnScroll() {
-     debugger;
-    var scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
-    var scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight;
-    var clientHeight = document.documentElement.clientHeight || window.innerHeight;
-    var scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
-
-    if (scrolledToBottom) {
-      this.querySearchResult();
-    }
-  }
   render() {
 
-    const blocks = this.state.data.map((item, i) => {
+    const blocks = this.state.loadedData.map((item, i) => {
 
       const onClick = () => this.signOrder(item.name);
       <div className="col l2">&nbsp;</div>
@@ -121,13 +80,16 @@ doQuery() {
     });
 
     return <div>
-
-      <div className="row container">
+      {this.bigData && <h5>Loaded {this.state.loadedData.length} of {this.bigData.length}</h5>}
+      <div className="row scroll-container">
         <div className="scroll-element">
           {blocks}
         </div>
-      </div>
-
+        </div>
+        
+        {this.state.loading && <div className="spinner">
+          <Loader loaded={false}/>
+        </div>}
     </div>
 
   }
